@@ -18,3 +18,17 @@ jobs:
 
       - name: Build app
         run: ./scripts/buildprod.sh
+      
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: 'projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
+          service_account: 'my-service-account@my-project.iam.gserviceaccount.com'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+        with:
+          version: '>= 363.0.0'
+
+      - name: 'Puish Docker Image'
+        run: 'gcloud builds submit --tag us-central1-docker.pkg.dev/notely-466317/notely-ar-repo/notely-ar-repo:latest'
